@@ -5,7 +5,7 @@ function Footer() {
   const [footerData, setFooterData] = useState(null);
   const BASE_URL = 'http://localhost:8080/';
 
-  // Backend එකෙන් දත්ත ගන්නවා
+  
   useEffect(() => {
     fetch('http://localhost:8080/api/public/footer')
       .then(res => res.json())
@@ -32,7 +32,7 @@ function Footer() {
               {footerData?.description || "Your trusted healthcare partner. With experienced doctors and state-of-the-art facilities, we provide you with the highest quality service."}
             </p>
 
-            {/* Social Icons (Database Data) */}
+            
             <div className="flex gap-4">
               {footerData?.socialMediaLinks?.map(social => (
                 <a
@@ -50,7 +50,7 @@ function Footer() {
                       className="w-6 h-6 object-contain"
                     />
                   ) : (
-                    // පින්තූරයක් නැත්නම් නමේ මුල් අකුරු 2 පෙන්වනවා (උදා: FB, IG)
+                    
                     <span className="text-xs font-bold">{social.platformName.substring(0, 2).toUpperCase()}</span>
                   )}
                 </a>

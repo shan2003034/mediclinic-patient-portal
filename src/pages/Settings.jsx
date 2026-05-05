@@ -26,14 +26,13 @@ function Settings() {
 
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // 1. පේජ් එක ලෝඩ් වෙද්දී DB එකෙන් දත්ත ගේනවා (Updated with Token)
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Token එක ගන්නවා
+    const token = localStorage.getItem('token'); 
 
     fetch('http://localhost:8080/api/patients/me/profile', {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`, // Token එක යවනවා
+        'Authorization': `Bearer ${token}`, 
         'Content-Type': 'application/json'
       }
     })
@@ -69,7 +68,6 @@ function Settings() {
     setPasswordData(prev => ({ ...prev, [name]: value }));
   };
 
-  // 2. Profile Picture Update Logic (Updated with Token)
   const handleEditPictureClick = () => fileInputRef.current.click();
   
   const handleFileChange = (event) => {
@@ -84,7 +82,7 @@ function Settings() {
       fetch('http://localhost:8080/api/patients/me/profile-picture', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}` // FormData යවන නිසා Content-Type දාන්නේ නෑ
+          'Authorization': `Bearer ${token}` 
         },
         body: formData,
       })
@@ -99,7 +97,6 @@ function Settings() {
     }
   };
 
-  // 3. Profile Details Save Logic (Updated with Token)
   const handleProfileSave = (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -119,7 +116,6 @@ function Settings() {
     .catch(() => setMessage({ type: 'error', text: 'Server error occurred.' }));
   };
 
-  // 4. Password Save Logic (Updated with Token)
   const handlePasswordSave = (e) => {
     e.preventDefault();
     

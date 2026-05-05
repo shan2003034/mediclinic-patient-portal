@@ -27,7 +27,7 @@ function DoctorCard({ doctor, baseUrl }) {
            <p className="text-slate-500 font-medium text-sm mb-6">{doctor.specialization} Specialist</p>
         </div>
         
-        {/* URL එකට Doctor ගේ ID එක පාස් කරනවා */}
+        
         <Link to={`/appointments?doctor=${doctor.id}`}>
           <button className="w-full bg-slate-50 text-blue-600 font-bold py-3.5 rounded-2xl hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
             Book Appointment

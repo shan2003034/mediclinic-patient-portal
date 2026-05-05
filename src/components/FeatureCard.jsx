@@ -1,6 +1,6 @@
 import React from 'react';
 
-// මේක තමයි අපේ අලුත් Modern Feature Card එක
+
 function FeatureCard({ feature, baseUrl }) {
   return (
     <div className="group relative bg-white p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-slate-100 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center overflow-hidden z-10">

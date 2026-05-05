@@ -5,10 +5,10 @@ function Contact() {
   const [contactData, setContactData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // අලුතින් දැම්මා: යවන ගමන්ද කියලා බලන්න
-  const [submitError, setSubmitError] = useState(null); // අලුතින් දැම්මා: Error ආවොත් පෙන්නන්න
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const [submitError, setSubmitError] = useState(null); 
   
-  // ෆෝම් එකේ දත්ත අල්ලගන්න State එක
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -16,7 +16,7 @@ function Contact() {
     message: ''
   });
 
-  // --- Backend එකෙන් Contact විස්තර ගන්නවා ---
+  
   useEffect(() => {
     fetch('http://localhost:8080/api/public/contact-info')
       .then(res => res.json())
@@ -30,7 +30,7 @@ function Contact() {
       });
   }, []);
 
-  // ෆෝම් එකේ ටයිප් කරද්දී State එක අප්ඩේට් කරන Function එක
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -39,19 +39,19 @@ function Contact() {
     }));
   };
 
-  // --- ෆෝම් එක Submit කරද්දී වෙන දේ (Backend එකට Data යැවීම) ---
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
     
-    // Spring Boot API එකට POST Request එක යවනවා
+    
     fetch('http://localhost:8080/api/public/contact/message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData), // State එකේ තියෙන දත්ත JSON කරලා යවනවා
+      body: JSON.stringify(formData), 
     })
     .then(res => {
       if (!res.ok) {
@@ -60,18 +60,18 @@ function Contact() {
       return res.json();
     })
     .then(data => {
-      // සාර්ථකව යැව්වා නම්
+     
       setIsSubmitting(false);
       setIsSubmitted(true);
       
-      // තත්පර 4කින් Success මැසේජ් එක අයින් කරනවා
+      
       setTimeout(() => setIsSubmitted(false), 4000);
       
-      // Form එක ආයෙත් හිස් කරනවා
+     
       setFormData({ firstName: '', lastName: '', email: '', message: '' });
     })
     .catch(err => {
-      // Error එකක් ආවොත්
+      
       console.error("Error sending message:", err);
       setIsSubmitting(false);
       setSubmitError("Failed to send the message. Please try again later.");
@@ -155,7 +155,7 @@ function Contact() {
                 <p className="text-slate-500">Fill out the form below and our medical team will get back to you as soon as possible.</p>
               </div>
               
-              {/* සාර්ථක වූ විට පෙන්වන කොටස */}
+              
               {isSubmitted && (
                 <div className="mb-8 bg-emerald-50 border border-emerald-100 text-emerald-600 px-6 py-4 rounded-2xl flex items-center gap-4 animate-fade-in">
                   <div className="bg-emerald-100 rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div>
@@ -163,7 +163,7 @@ function Contact() {
                 </div>
               )}
 
-              {/* Error ආවොත් පෙන්වන කොටස */}
+             
               {submitError && (
                 <div className="mb-8 bg-red-50 border border-red-100 text-red-600 px-6 py-4 rounded-2xl flex items-center gap-4 animate-fade-in">
                   <div className="bg-red-100 rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path></svg></div>
@@ -229,7 +229,7 @@ function Contact() {
                   ></textarea>
                 </div>
 
-                {/* යවන ගමන් නම් "Sending..." කියලා වැටෙනවා */}
+                
                 <button 
                   type="submit" 
                   disabled={isSubmitting}

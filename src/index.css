@@ -1,13 +1,11 @@
 @import "tailwindcss";
 
-/* Top Doctors - 3D Slider එකේ අමතර කාඩ් සැඟවීම (Loop එකට ගැලපෙන පරිදි) */
 .doctors-swiper .swiper-slide {
   opacity: 0 !important;
   pointer-events: none;
   transition: opacity 0.5s ease-in-out;
 }
 
-/* මැද, වම් සහ දකුණු කාඩ් (සහ ඒවායේ කෘතිම Loop Duplicates) පමණක් පෙන්නන්න */
 .doctors-swiper .swiper-slide-active,
 .doctors-swiper .swiper-slide-next,
 .doctors-swiper .swiper-slide-prev,

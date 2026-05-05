@@ -37,7 +37,7 @@ function Home() {
     );
   }
 
-  // Database එකේ Hero Image එකක් තිබ්බොත් ඒක ගන්නවා, නැත්නම් ඔයාගේ Local Image එක ගන්නවා
+ 
   const heroBgImage = homeData?.heroImagePath ? `${BASE_URL}${homeData.heroImagePath}` : doctorsBanner;
 
   return (

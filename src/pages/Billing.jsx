@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 function Billing() {
-  // Pagination සඳහා Mock Data (ගෙවීම් වාර්තා 12ක්)
+  
   const allTransactions = Array.from({ length: 12 }, (_, i) => ({
     id: `INV-2026-${8050 - i}`,
     date: `${28 - i} ${i % 2 === 0 ? 'May' : 'Apr'} 2026`,
     description: i % 3 === 0 ? 'Cardiology Consultation' : i % 2 === 0 ? 'Laboratory Tests' : 'Pharmacy Prescription',
     amount: i % 3 === 0 ? '$ 150.00' : i % 2 === 0 ? '$ 85.00' : '$ 45.00',
-    status: i === 0 ? 'Pending' : 'Paid', // පළවෙනි එක විතරක් ගෙවන්න තියෙනවා (Pending)
+    status: i === 0 ? 'Pending' : 'Paid', 
   }));
 
   // --- Pagination Logic ---

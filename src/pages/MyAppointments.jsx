@@ -13,21 +13,17 @@ function MyAppointments() {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [appointmentToCancel, setAppointmentToCancel] = useState(null);
 
-    // අලුත් State එක: තෝරගත්ත Appointment එක මතක තියාගන්න
     const [selectedAppointment, setSelectedAppointment] = useState(null);
 
-    // Modals සඳහා අලුත් States
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    // Backend එකෙන් ගේන දත්ත තියාගන්න State එක
     const [appointmentsList, setAppointmentsList] = useState([]);
 
     const navigate = useNavigate();
 
-    // 1. Backend එකෙන් දත්ත ගේන Function එක
     const fetchAppointments = () => {
         fetch('http://localhost:8080/api/appointments/patient/1') 
             .then(res => res.json())
@@ -40,7 +36,6 @@ function MyAppointments() {
                     return {
                         id: app.id,
                         
-                        // 👇 මෙන්න මේ පේළිය අලුතින් දාන්න 👇
                         doctorId: app.doctorId, 
                         
                         doctorName: app.doctorName,
@@ -51,7 +46,7 @@ function MyAppointments() {
                         status: app.statusId === 1 ? 'Upcoming' : 'Past',
                         realStatusId: app.statusId, 
                         type: "In-Person", 
-                        image: app.image ? app.image : "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop"
+                        image: app.image ? `http://localhost:8080/${app.image}` : "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop"
                     };
                 });
                 setAppointmentsList(formattedData);
@@ -59,12 +54,10 @@ function MyAppointments() {
             .catch(err => console.error("Error fetching appointments:", err));
     };
 
-    // පිටුව ලෝඩ් වෙද්දී දත්ත ගේනවා
     useEffect(() => {
         fetchAppointments();
     }, []);
 
-    // 2. Appointment එක Cancel කරන Function එක
     const handleCancelClick = (id) => {
         setAppointmentToCancel(id);
         setIsConfirmOpen(true);
@@ -83,7 +76,7 @@ function MyAppointments() {
             if (res.ok) {
                 setSuccessMessage(data.message);
                 setIsSuccessModalOpen(true);
-                fetchAppointments(); // Cancel කරාම ලිස්ට් එක අලුත් කරනවා
+                fetchAppointments(); 
             } else {
                 setErrorMessage(data.error || "Failed to cancel.");
                 setIsErrorModalOpen(true);
@@ -102,7 +95,6 @@ function MyAppointments() {
         navigate('/appointments');
     };
 
-    // Status Badge එකේ පාට සහ නම තීරණය කරන Function එක
     const getBadgeInfo = (statusId) => {
         if (statusId === 1) return { text: "Confirmed", classes: "bg-emerald-50 text-emerald-600 border-emerald-100" };
         if (statusId === 2) return { text: "Completed", classes: "bg-blue-50 text-blue-600 border-blue-100" };
@@ -219,7 +211,7 @@ function MyAppointments() {
                                         <>
                                             <button
                                                 onClick={() => {
-                                                    setSelectedAppointment(appointment); // තෝරපු එක සෙට් කරනවා
+                                                    setSelectedAppointment(appointment); 
                                                     setIsRescheduleOpen(true);
                                                 }}
                                                 className="bg-slate-50 text-slate-600 hover:bg-blue-600 hover:text-white px-6 py-2.5 rounded-xl font-bold transition-colors text-sm border border-slate-100 hover:border-blue-600 shadow-sm w-full"
@@ -234,10 +226,10 @@ function MyAppointments() {
                                             </button>
                                         </>
                                     ) : (
-                                        // මෙතන තමයි Cancelled (3) නම් බොත්තම Disable කරන්නේ
+                                        
                                         <button
                                             onClick={() => {
-                                                setSelectedAppointment(appointment); // තෝරපු එක සෙට් කරනවා
+                                                setSelectedAppointment(appointment); 
                                                 setIsNotesOpen(true);
                                             }}
                                             disabled={appointment.realStatusId === 3}
@@ -258,20 +250,17 @@ function MyAppointments() {
 
             </div>
 
-            {/* අදාළ Appointment එක Modals වලට යවනවා */}
             <RescheduleModal
                 isOpen={isRescheduleOpen}
                 onClose={() => setIsRescheduleOpen(false)}
                 appointment={selectedAppointment}
 
-                // සාර්ථක වුණොත් මේක වැඩ කරනවා
                 onSuccess={(msg) => {
                     setIsRescheduleOpen(false);
                     setSuccessMessage(msg);
                     setIsSuccessModalOpen(true);
                 }}
 
-                // අසාර්ථක වුණොත් (Limit පැනලා නම්) මේක වැඩ කරනවා
                 onError={(err) => {
                     setIsRescheduleOpen(false);
                     setErrorMessage(err);
@@ -289,7 +278,7 @@ function MyAppointments() {
                 isOpen={isSuccessModalOpen}
                 onClose={() => {
                     setIsSuccessModalOpen(false);
-                    window.location.reload(); // මුළු පිටුවම අලුත් වෙනවා
+                    window.location.reload(); 
                 }}
                 message={successMessage}
                 title="Action Successful"

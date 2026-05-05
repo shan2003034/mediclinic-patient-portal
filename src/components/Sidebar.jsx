@@ -8,23 +8,23 @@ function Sidebar({ isOpen, setIsOpen }) {
   const isActive = (path) => location.pathname === path;
   const onClose = () => setIsOpen(false);
 
-  // 1. නම සහ පින්තූරය තියාගන්න State
+  
   const [patientName, setPatientName] = useState('Loading...');
-  // Default Image එකක් තියාගන්නවා
+ 
   const [profilePic, setProfilePic] = useState("https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200&auto=format&fit=crop");
 
-  // Sidebar.jsx හි useEffect කොටස
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     
     if (token) {
       try {
-        // නම ගන්න විතරක් Token එක ලිහමු
+       
         const decodedData = jwtDecode(token);
         const fullName = `${decodedData.firstName || ''} ${decodedData.lastName || ''}`.trim();
         setPatientName(fullName || 'Patient');
 
-        // පින්තූරය ගන්න me/profile එකට කතා කරමු
+        
         fetch('http://localhost:8080/api/patients/me/profile', {
           method: 'GET',
           headers: {
@@ -97,7 +97,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             
             <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 p-1 mb-4 shadow-lg shadow-blue-500/30">
               <img 
-                src={profilePic} // 4. Hardcode කරපු ලින්ක් එක වෙනුවට State එක දැම්මා
+                src={profilePic} 
                 alt="Profile" 
                 className="w-full h-full rounded-full border-2 border-white object-cover" 
               />

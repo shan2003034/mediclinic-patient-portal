@@ -10,14 +10,14 @@ function LabResults() {
     { name: 'Vitamin D', value: '24', unit: 'ng/mL', status: 'Low', range: '30 - 100', color: 'amber', percentage: 20 },
   ];
 
-  // Pagination බලාගන්න Mock Data 15ක් හැදුවා
+ 
   const allLabReports = Array.from({ length: 15 }, (_, i) => ({
     id: i + 1,
     testName: i % 2 === 0 ? 'Complete Blood Count (CBC)' : i % 3 === 0 ? 'Lipid Panel' : 'Thyroid Profile',
     date: `${(i % 28) + 1} May 2026`,
     lab: i % 2 === 0 ? 'City Center Lab' : 'MediCare Diagnostics',
     status: 'Final',
-    isNew: i < 2 // මුල් දෙකට විතරක් New badge එක පෙන්වනවා
+    isNew: i < 2 
   }));
 
   // --- Pagination Logic ---
@@ -39,7 +39,7 @@ function LabResults() {
         <p className="text-slate-500">Track your biomarkers and download your recent laboratory test reports.</p>
       </div>
 
-      {/* 1. Reusable Alert Component එක පාවිච්චි කිරීම */}
+    
       <AlertBanner 
         title="Attention Required: Lipid Profile"
         message="Your recent LDL Cholesterol level is higher than the recommended range. Please schedule a follow-up with Dr. Sarah Johnson."
@@ -48,7 +48,7 @@ function LabResults() {
         onButtonClick={() => alert('Redirecting to booking...')}
       />
 
-      {/* 2. Reusable Biomarker Component එක පාවිච්චි කිරීම */}
+      
       <h2 className="text-xl font-bold text-slate-800 mb-6 px-2">Latest Key Biomarkers</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {keyMetrics.map((metric, index) => (

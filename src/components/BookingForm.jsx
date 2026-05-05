@@ -8,7 +8,7 @@ function BookingForm({ onSubmit }) {
     phoneNumber: '',
     department: '',
     doctorId: '',
-    date: null, // Date එක දැන් Object එකක් විදිහට තමයි සේව් වෙන්නේ
+    date: null, 
     time: '',
     timeSlotId: '', 
     reason: ''
@@ -17,7 +17,7 @@ function BookingForm({ onSubmit }) {
   const [departmentsList, setDepartmentsList] = useState([]);
   const [doctorsList, setDoctorsList] = useState([]);
   
-  // අලුත් State ටික: ඩොක්ටර්ගේ Schedule එකයි, නිවාඩු ටිකයි, Time slots ටිකයි තියාගන්න
+  
   const [availableDays, setAvailableDays] = useState([]);
   const [leaveDates, setLeaveDates] = useState([]);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
@@ -30,7 +30,7 @@ function BookingForm({ onSubmit }) {
     });
   };
 
-  // 1. පිටුව ලෝඩ් වෙද්දී Departments ගේනවා
+  
   useEffect(() => {
     fetch('http://localhost:8080/api/specializations')
       .then(response => response.json())
@@ -38,14 +38,14 @@ function BookingForm({ onSubmit }) {
       .catch(error => console.error("Error fetching departments:", error));
   }, []);
 
-  // 2. Department එක වෙනස් වෙද්දී Doctors ලා ගේනවා
+  
   useEffect(() => {
     if (formData.department) {
       fetch(`http://localhost:8080/api/doctors/department/${formData.department}`)
         .then(response => response.json())
         .then(data => {
           setDoctorsList(data);
-          // අලුත් ඩිපාර්ට්මන්ට් එකක් තේරුවාම යටින් තියෙන ඔක්කොම Reset කරනවා
+          
           setFormData(prev => ({ ...prev, doctorId: '', date: null, time: '', timeSlotId: '' })); 
           setAvailableDays([]);
           setLeaveDates([]);
@@ -58,13 +58,13 @@ function BookingForm({ onSubmit }) {
     }
   }, [formData.department]);
 
-  // 3. Doctor කෙනෙක් තේරුවාම එයාගේ Availability එක (Schedules & Leaves) ගේනවා
+  
   useEffect(() => {
     if (formData.doctorId) {
       fetch(`http://localhost:8080/api/doctors/${formData.doctorId}/availability`)
         .then(response => response.json())
         .then(data => {
-          // දවස්වල නම් (Monday, Tuesday) අංක වලට හරවනවා (1, 2)
+          
           const daysMap = { 'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6 };
           const numericDays = data.availableDays.map(day => daysMap[day]);
           
@@ -72,7 +72,7 @@ function BookingForm({ onSubmit }) {
           setLeaveDates(data.leaveDates.map(date => parseISO(date)));
           setAllSchedules(data.schedules);
           
-          // ඩොක්ටර්ව වෙනස් කළාම Date/Time reset කරනවා
+          
           setFormData(prev => ({ ...prev, date: null, time: '', timeSlotId: '' }));
           setAvailableTimeSlots([]);
         })
@@ -80,33 +80,33 @@ function BookingForm({ onSubmit }) {
     }
   }, [formData.doctorId]);
 
-  // 4. දවසක් තේරුවාම, ඒ දවසට අදාළ Time Slots ටික ෆිල්ටර් කරලා අරගන්නවා
+  
   useEffect(() => {
     if (formData.date && allSchedules.length > 0) {
-      const selectedDayName = format(formData.date, 'EEEE'); // උදා: 'Monday'
+      const selectedDayName = format(formData.date, 'EEEE'); 
       
-      // තේරුව දවසට අදාළ schedules ටික විතරක් පෙරලා ගන්නවා
+    
       const slotsForDay = allSchedules.filter(s => s.dayOfWeek === selectedDayName);
       setAvailableTimeSlots(slotsForDay);
       setFormData(prev => ({ ...prev, time: '', timeSlotId: '' }));
     }
   }, [formData.date, allSchedules]);
 
-  // මේ Function එකෙන් තමයි Datepicker එකේ දවස් Disable කරන්නේ
+  
   const isSelectableDate = (date) => {
-    const day = getDay(date); // 0 (Sunday) ඉඳන් 6 (Saturday) වෙනකම් අංකයක් එනවා
-    // 1. මේ දවස ඩොක්ටර් එන දවසක්ද බලනවා
+    const day = getDay(date); 
+    
     const isAvailableDay = availableDays.includes(day);
-    // 2. මේ දවස ඩොක්ටර් නිවාඩු දාපු දවසක්ද බලනවා
+    
     const isLeaveDate = leaveDates.some(leaveDate => isSameDay(date, leaveDate));
-    // 3. අදට වඩා පරණ දවස් තෝරන්න බැරි කරනවා
+    
     const isFutureDate = date >= new Date(new Date().setHours(0,0,0,0));
 
-    // එන දවසක් වෙන්නත් ඕනේ, නිවාඩු දවසක් නොවෙන්නත් ඕනේ, අනාගත දවසක් වෙන්නත් ඕනේ
+    
     return isAvailableDay && !isLeaveDate && isFutureDate;
   };
 
-  // Time Dropdown එක වෙනස් වෙද්දී ID එකයි Time එකයි දෙකම සේව් කරගන්නවා
+ 
   const handleTimeChange = (e) => {
     const selectedSlotId = e.target.value;
     const selectedSlot = availableTimeSlots.find(slot => slot.timeSlotId.toString() === selectedSlotId);
@@ -130,10 +130,10 @@ function BookingForm({ onSubmit }) {
               date: formData.date ? format(formData.date, 'yyyy-MM-dd') : ''
           };
           
-          // Submit කරලා ප්‍රතිඵලය එනකම් ඉන්නවා
+          
           const isSuccess = await onSubmit(finalData);
           
-          // සාර්ථක වුණොත් ඔක්කොම Reset කරනවා
+          
           if (isSuccess) {
             setFormData({
               phoneNumber: '',
@@ -216,14 +216,14 @@ function BookingForm({ onSubmit }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
               <label className="block text-slate-700 text-sm font-semibold mb-2 ml-1">Preferred Date</label>
-              {/* මෙතන තමයි මැජික් එක වෙන්නේ! */}
+              
               <DatePicker
                 selected={formData.date}
                 onChange={(date) => setFormData({ ...formData, date })}
-                filterDate={isSelectableDate} // දවස් ෆිල්ටර් කරන ෆන්ක්ෂන් එක
-                minDate={new Date()} // අදින් පස්සේ දවස් විතරයි පෙන්නන්නේ
+                filterDate={isSelectableDate} 
+                minDate={new Date()} 
                 placeholderText="Select available date"
-                disabled={!formData.doctorId} // ඩොක්ටර්ව තෝරනකම් ඔබන්න බෑ
+                disabled={!formData.doctorId} 
                 required
                 className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-600 disabled:bg-slate-100 disabled:cursor-not-allowed"
               />
@@ -235,7 +235,7 @@ function BookingForm({ onSubmit }) {
                 value={formData.timeSlotId}
                 onChange={handleTimeChange}
                 required
-                disabled={!formData.date || availableTimeSlots.length === 0} // දවසක් තෝරනකම් ඔබන්න බෑ
+                disabled={!formData.date || availableTimeSlots.length === 0}
                 className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-600 appearance-none disabled:bg-slate-100 disabled:cursor-not-allowed"
               >
                 <option value="">
@@ -243,7 +243,7 @@ function BookingForm({ onSubmit }) {
                     ? "No slots available" 
                     : "Select Time Slot"}
                 </option>
-                {/* තේරුව දවසට අදාළ වෙලාවල් ටික විතරක් ලෝඩ් කරනවා */}
+                
                 {availableTimeSlots.map((slot) => (
                   <option key={slot.timeSlotId} value={slot.timeSlotId}>
                     {slot.timeSlot}

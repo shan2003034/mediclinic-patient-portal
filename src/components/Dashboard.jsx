@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function Dashboard() {
-  // 1. Dashboard එකේ දත්ත තියාගන්න State එකක් හදමු
+  
   const [dashboardData, setDashboardData] = useState({
     patientName: 'User',
     stats: { upcoming: 0, labResults: 0, prescriptions: 0 },
@@ -11,12 +11,12 @@ function Dashboard() {
   });
   const [loading, setLoading] = useState(true);
 
-  // 2. පේජ් එක ලෝඩ් වෙද්දී Backend එකෙන් දත්ත ගේනවා
-  // Dashboard.jsx හි useEffect කොටස
+ 
+ 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // 1. Token එක ගන්නවා
+    const token = localStorage.getItem('token'); 
 
-    // 2. URL එක 'me/dashboard' විදිහට වෙනස් කළා සහ Token එක Header එකේ යවනවා
+   
     fetch('http://localhost:8080/api/patients/me/dashboard', {
       method: 'GET',
       headers: {
@@ -51,7 +51,7 @@ function Dashboard() {
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <p className="text-blue-200 font-medium mb-1 text-lg">Hello,</p>
-            {/* Backend එකෙන් එන නම මෙතනට වැටෙනවා */}
+          
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
               {dashboardData.patientName}
             </h1>
@@ -77,7 +77,7 @@ function Dashboard() {
           </div>
           <div>
             <p className="text-slate-500 font-medium mb-1">Upcoming</p>
-            {/* Backend එකෙන් එන ගණන */}
+            
             <h3 className="text-2xl font-extrabold text-slate-800">{dashboardData.stats.upcoming < 10 ? `0${dashboardData.stats.upcoming}` : dashboardData.stats.upcoming} Visit</h3>
           </div>
         </div>
@@ -88,7 +88,7 @@ function Dashboard() {
           </div>
           <div>
             <p className="text-slate-500 font-medium mb-1">Lab Results</p>
-            {/* Backend එකෙන් එන ගණන */}
+            
             <h3 className="text-2xl font-extrabold text-slate-800">{dashboardData.stats.labResults < 10 ? `0${dashboardData.stats.labResults}` : dashboardData.stats.labResults} Ready</h3>
           </div>
         </div>
@@ -99,7 +99,7 @@ function Dashboard() {
           </div>
           <div>
             <p className="text-slate-500 font-medium mb-1">Prescriptions</p>
-            {/* Backend එකෙන් එන ගණන */}
+            
             <h3 className="text-2xl font-extrabold text-slate-800">{dashboardData.stats.prescriptions < 10 ? `0${dashboardData.stats.prescriptions}` : dashboardData.stats.prescriptions} Active</h3>
           </div>
         </div>
@@ -112,7 +112,7 @@ function Dashboard() {
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6 px-2">
             <h2 className="text-2xl font-bold text-slate-800">Next Appointment</h2>
-            {/* View All එකෙන් My Appointments එකට යනවා */}
+           
             <Link to="/my-appointments">
               <button className="text-blue-600 font-semibold hover:underline">View All</button>
             </Link>
@@ -129,7 +129,7 @@ function Dashboard() {
               </div>
 
               <div className="flex-1 flex flex-col md:flex-row items-center md:items-start gap-6 w-full text-center md:text-left">
-                {/* Doctor ගේ පින්තූරය තියෙනවා නම් ඒක, නැත්නම් Default එකක් */}
+                
                 <img 
                   src={dashboardData.nextAppointment.doctorImage ? `http://localhost:8080/${dashboardData.nextAppointment.doctorImage}` : "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop"} 
                   alt="Doctor" 
@@ -144,7 +144,7 @@ function Dashboard() {
                 </div>
               </div>
               
-              {/* Reschedule Button එක අයින් කළා */}
+              
             </div>
           ) : (
             <div className="bg-white rounded-[2.5rem] p-10 shadow-xl shadow-slate-200/50 border border-slate-100 text-center">
@@ -187,7 +187,7 @@ function Dashboard() {
                <p className="text-slate-500 text-sm text-center py-4">No recent activities.</p>
             )}
 
-            {/* Medical Records වලට යන්න Link කළා */}
+           
             <Link to="/records">
               <button className="w-full mt-8 bg-slate-50 hover:bg-slate-100 text-blue-600 border border-slate-200 py-3 rounded-xl font-bold transition-colors">
                 View All History

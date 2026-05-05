@@ -7,14 +7,14 @@ function NotesModal({ isOpen, onClose, appointment }) {
   useEffect(() => {
     if (isOpen && appointment) {
       setLoading(true);
-      // 👇 මෙතන ලින්ක් එක හරියටම හැදුවා 👇
+     
       fetch(`http://localhost:8080/api/appointments/${appointment.id}/notes`)
         .then(res => {
             if (!res.ok) throw new Error("No notes found");
             return res.json();
         })
         .then(data => {
-          console.log("Prescription Data:", data); // F12 ඔබලා බලන්න Data එනවද කියලා
+          console.log("Prescription Data:", data); 
           setNotes(data);
           setLoading(false);
         })
@@ -65,7 +65,7 @@ function NotesModal({ isOpen, onClose, appointment }) {
               <div>
                 <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2">Prescription Details</h4>
                 <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100 text-sm whitespace-pre-wrap leading-relaxed text-slate-800">
-                  {/* 👇 මෙතන Spring Boot එකෙන් එන නම (medicinceDetails) දැම්මා 👇 */}
+                 
                   {notes.medicinceDetails || notes.medicince_details}
                 </div>
               </div>

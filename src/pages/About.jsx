@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import FeatureCard from '../components/FeatureCard'; // අලුත් කම්පෝනන්ට් එක Import කරගන්නවා
+import FeatureCard from '../components/FeatureCard'; 
 
 function About() {
   const [aboutData, setAboutData] = useState(null);
@@ -9,7 +9,7 @@ function About() {
   
   const BASE_URL = 'http://localhost:8080/';
 
-  // Backend එකෙන් දත්ත ගන්නවා
+  
   useEffect(() => {
     fetch('http://localhost:8080/api/public/about')
       .then(res => {
@@ -27,7 +27,7 @@ function About() {
       });
   }, []);
 
-  // දත්ත එනකම් Loading එකක් පෙන්වනවා
+  
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
@@ -37,7 +37,7 @@ function About() {
     );
   }
 
-  // Error එකක් ආවොත් පෙන්වනවා
+  
   if (error || !aboutData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 text-red-500 font-bold">
@@ -53,7 +53,7 @@ function About() {
       <section 
         className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-cover bg-center bg-no-repeat"
         style={{ 
-          // Database එකේ Hero Image එකක් නැත්නම් Default එකක් ගන්නවා
+          
           backgroundImage: `url('https://i.ibb.co/dJ665nZs/diverse-group-people-waiting-hospital-reception-lobby-attend-medical-appointment-with-general-practi.jpg')` 
         }}
       >
@@ -138,7 +138,7 @@ function About() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {/* ලූපයක් දාලා කාඩ් පෙන්වීම */}
+           
             {aboutData.features && aboutData.features.length > 0 ? (
               aboutData.features.map(feature => (
                 <FeatureCard key={feature.id} feature={feature} baseUrl={BASE_URL} />

@@ -4,20 +4,20 @@ function MedicalRecords() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
   
-  // 1. ඇත්ත Data දාගන්න අලුත් State එකක් සහ Loading State එකක් හදමු
+  
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 6; 
 
-  // 2. Spring Boot එකෙන් Data ගේන Effect එක
+ 
   useEffect(() => {
-    // ඔයාගේ Patient ID එක 1 කියලා හිතලා තමයි මේ ලින්ක් එක දාලා තියෙන්නේ (පස්සේ මේක Login වුණ පේෂන්ට්ගේ ID එකට මාරු කරන්න පුළුවන්)
+    
     fetch('http://localhost:8080/api/medical-records/patient/1/all')
       .then(res => res.json())
       .then(data => {
-        // Backend එකෙන් එන Data ටික අපේ UI එකට ගැළපෙන විදිහට පොඩ්ඩක් වෙනස් කරගමු
+        
         const formattedData = data.map(item => {
           let displayType = 'Prescription';
           let category = 'Prescription';
@@ -33,11 +33,11 @@ function MedicalRecords() {
           return {
             ...item,
             id: item.id,
-            title: item.documentName, // Backend එකේ documentName එක UI එකේ title එකට දානවා
-            doctor: item.source,      // Backend එකේ source එක UI එකේ doctor ට දානවා
+            title: item.documentName, 
+            doctor: item.source,      
             date: item.dateAdded,
-            type: displayType,        // 'Lab Report', 'Prescription' වගේ හැදුවා
-            category: category,       // Filter කරන්න ලේසි වෙන්න හැදුවා
+            type: displayType,        
+            category: category,      
             size: item.fileSize || '-' 
           };
         });
@@ -67,19 +67,16 @@ function MedicalRecords() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // 3. Download Button Logic එක (වැදගත්ම කොටස!)
+ 
   const handleAction = (record) => {
     if (record.type === 'Prescription') {
       
-      // 1. අලුත් හිස් වින්ඩෝ එකක් ඕපන් කරනවා
       const printWindow = window.open('', '_blank');
       
-      // \n කියලා තියෙන තැන් වලට HTML <br/> ටැග් එක දාලා පේළි කඩාගන්නවා
       const formattedMedicines = record.prescriptionDetails
         ? record.prescriptionDetails.replace(/\\n/g, '<br/>').replace(/\n/g, '<br/>')
         : 'No medicine details available.';
 
-      // 2. ඒ වින්ඩෝ එක ඇතුළට ලස්සනට ඩිසයින් කරපු HTML කේතයක් දානවා
       printWindow.document.write(`
         <html>
           <head>
@@ -130,14 +127,12 @@ function MedicalRecords() {
       printWindow.document.close();
       printWindow.focus();
       
-      // 3. තත්පර කාලකින් (ඩිසයින් එක ලෝඩ් වෙන්න දීලා) Print Menu එක ඕපන් කරනවා
       setTimeout(() => {
         printWindow.print();
-        printWindow.close(); // ප්‍රින්ට් කරලා ඉවර වුණාම ඒක අතුරුදහන් වෙනවා
+        printWindow.close(); 
       }, 250);
 
     } else {
-      // Lab හෝ Radiology නම් කෙලින්ම File එක ඕපන් කරනවා
       if(record.filePath) {
         window.open(`http://localhost:8080/${record.filePath}`, '_blank');
       } else {
@@ -200,7 +195,6 @@ function MedicalRecords() {
         </div>
 
         <div className="divide-y divide-slate-100">
-          {/* Loading එකක් පෙන්නනවා Data එනකම් */}
           {loading ? (
             <div className="py-20 text-center text-slate-400 font-medium">Loading your medical records...</div>
           ) : currentRecords.length > 0 ? (
@@ -225,7 +219,6 @@ function MedicalRecords() {
                   <p className="text-slate-500 text-sm">{record.date}</p>
                 </div>
                 <div className="col-span-1 md:col-span-2 text-right">
-                  {/* 👇 Download Button එකට handleAction එක සම්බන්ද කළා 👇 */}
                   <button 
                     onClick={() => handleAction(record)}
                     className="bg-slate-50 text-blue-600 hover:bg-blue-600 hover:text-white p-3 rounded-xl transition-all duration-300 border border-slate-100 group-hover:shadow-md"

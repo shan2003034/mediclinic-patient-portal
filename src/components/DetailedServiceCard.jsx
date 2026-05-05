@@ -1,7 +1,7 @@
 import React from 'react';
 
 function DetailedServiceCard({ service }) {
-  // Backend එකෙන් එන Base URL එක (අවශ්‍ය නම් env එකකින් ගන්න පුළුවන්)
+ 
   const BASE_URL = 'http://localhost:8080/';
 
   return (
@@ -10,14 +10,14 @@ function DetailedServiceCard({ service }) {
       {/* Icon Section */}
       <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-blue-600 transition-all duration-300 overflow-hidden">
         {service.iconPath ? (
-          // Backend එකේ පින්තූරයක් තියෙනවා නම් ඒක පෙන්වනවා
+         
           <img 
             src={`${BASE_URL}${service.iconPath}`} 
             alt={service.title} 
             className="w-10 h-10 object-contain group-hover:brightness-0 group-hover:invert transition-all duration-300"
           />
         ) : (
-          // පින්තූරයක් නැත්නම් Default SVG එකක් පෙන්වනවා
+         
           <svg className="w-8 h-8 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
           </svg>
@@ -29,7 +29,7 @@ function DetailedServiceCard({ service }) {
         {service.title}
       </h3>
       
-      {/* flex-grow දාලා තියෙන්නේ කාඩ් ඔක්කොම එකම උසට තියාගන්න */}
+     
       <p className="text-slate-500 mb-8 leading-relaxed flex-grow">
         {service.description}
       </p>
@@ -38,7 +38,7 @@ function DetailedServiceCard({ service }) {
       <div className="border-t border-slate-100 pt-6 mt-auto">
         <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4">Key Treatments:</h4>
         <ul className="space-y-3">
-          {/* Backend එකෙන් එන treatments (features) array එක map කරනවා */}
+          
           {service.treatments && service.treatments.map((treatment, index) => (
             <li key={index} className="flex items-start text-slate-500 text-sm font-medium">
               <span className="text-blue-500 mr-3 mt-0.5">

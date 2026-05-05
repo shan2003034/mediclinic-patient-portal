@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import DoctorCard from '../components/DoctorCard'; // කලින් හදපු Component එක Import කරගන්නවා
+import DoctorCard from '../components/DoctorCard'; 
 
 function Doctors() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   
-  // එකපාරකට පෙන්වන ඩොක්ටර්ස්ලා ගාන (Load More වෙනුවෙන්)
+  
   const [visibleCount, setVisibleCount] = useState(6); 
   
   const BASE_URL = 'http://localhost:8080/';
 
-  // 1. Backend එකෙන් Doctors දත්ත ගන්නවා
+  
   useEffect(() => {
-    // (මේ API එක ඔයා Backend එකේ හදන්න ඕනේ අර Home Page එකේ Top Doctors යැව්වා වගේමයි)
+    
     fetch('http://localhost:8080/api/public/doctors')
       .then(res => res.json())
       .then(data => {
@@ -26,19 +26,19 @@ function Doctors() {
       });
   }, []);
 
-  // 2. ඩොක්ටර්ස්ලාගේ දත්ත වලින්ම Specializations ටික හොයාගෙන Filter බොත්තම් ටික හදනවා
-  // Set එකක් පාවිච්චි කරන්නේ එකම නම දෙපාරක් එන එක නවත්තන්න
+ 
+ 
   const categories = ['All', ...new Set(doctors.map(doc => doc.specialization))];
 
-  // 3. තෝරපු Category එකට අදාළව ඩොක්ටර්ස්ලාව ෆිල්ටර් කරනවා
+
   const filteredDoctors = selectedCategory === 'All' 
     ? doctors 
     : doctors.filter(doctor => doctor.specialization === selectedCategory);
 
-  // 4. Load More එකට අදාළව පෙන්වන්න ඕන ඩොක්ටර්ස්ලා ටික වෙන් කරගන්නවා
+  
   const displayedDoctors = filteredDoctors.slice(0, visibleCount);
 
-  // Category එක මාරු කරද්දී ආයෙත් මුල ඉඳන් (6ක්) පෙන්වන්න State එක රීසෙට් කරනවා
+
   useEffect(() => {
     setVisibleCount(6);
   }, [selectedCategory]);
@@ -100,7 +100,7 @@ function Doctors() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
             {displayedDoctors.map((doctor) => (
-              // අපි කලින් හදපු DoctorCard එක මෙතන පාවිච්චි කරනවා
+              
               <DoctorCard key={doctor.id} doctor={doctor} baseUrl={BASE_URL} />
             ))}
           </div>
@@ -117,7 +117,7 @@ function Doctors() {
             </div>
           )}
 
-          {/* Empty State (අදාළ category එකේ කවුරුත් නැත්නම්) */}
+          
           {filteredDoctors.length === 0 && (
             <div className="text-center py-32 bg-white rounded-[3rem] shadow-inner border border-slate-100 max-w-4xl mx-auto mt-10">
               <div className="text-6xl mb-6 opacity-30">🔍</div>

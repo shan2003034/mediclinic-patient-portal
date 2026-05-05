@@ -18,13 +18,12 @@ import LabResults from './pages/LabResults';
 import Billing from './pages/Billing';
 import Settings from './pages/Settings';
 
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-
     <Router>
       <Navbar />
-
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -32,61 +31,83 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/doctors" element={<Doctors />} />
-        <Route path="/appointments" element={<Appointments />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
 
+        
+        <Route 
+          path="/appointments" 
+          element={
+            <ProtectedRoute>
+              <Appointments />
+            </ProtectedRoute>
+          } 
+        />
+
         <Route
           path="/dashboard"
           element={
-            <PatientLayout>
-              <Dashboard />
-            </PatientLayout>
+            <ProtectedRoute>
+              <PatientLayout>
+                <Dashboard />
+              </PatientLayout>
+            </ProtectedRoute>
           }
         />
+        
         <Route
           path="/my-appointments"
           element={
-            <PatientLayout>
-              <MyAppointments />
-            </PatientLayout>
+            <ProtectedRoute>
+              <PatientLayout>
+                <MyAppointments />
+              </PatientLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/records"
           element={
-            <PatientLayout>
-              <MedicalRecords />
-            </PatientLayout>
+            <ProtectedRoute>
+              <PatientLayout>
+                <MedicalRecords />
+              </PatientLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/lab-results"
           element={
-            <PatientLayout>
-              <LabResults />
-            </PatientLayout>
+            <ProtectedRoute>
+              <PatientLayout>
+                <LabResults />
+              </PatientLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/billing"
           element={
-            <PatientLayout>
-              <Billing />
-            </PatientLayout>
+            <ProtectedRoute>
+              <PatientLayout>
+                <Billing />
+              </PatientLayout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/settings"
           element={
-            <PatientLayout>
-              <Settings />
-            </PatientLayout>
+            <ProtectedRoute>
+              <PatientLayout>
+                <Settings />
+              </PatientLayout>
+            </ProtectedRoute>
           }
         />
 

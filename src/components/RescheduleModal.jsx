@@ -14,14 +14,14 @@ function RescheduleModal({ isOpen, onClose, appointment, onSuccess, onError }) {
 
   useEffect(() => {
     if (isOpen && appointment) {
-      // 1. මේකෙන් බලාගන්න පුළුවන් doctorId එක React එකට එනවද කියලා
+     
       console.log("Selected Appointment Data:", appointment); 
 
       if (appointment.doctorId) {
         fetch(`http://localhost:8080/api/doctors/${appointment.doctorId}/schedules`)
           .then(res => res.json())
           .then(data => {
-              // 2. ඩොක්ටර්ගේ දවස් ටික එනවද කියලා මෙතනින් පේනවා
+              
               console.log("Fetched Schedules from DB:", data); 
               setSchedules(data);
               
@@ -53,13 +53,13 @@ function RescheduleModal({ isOpen, onClose, appointment, onSuccess, onError }) {
 
   if (!isOpen || !appointment) return null;
 
-  // මෙතන අද දවස තෝරන්න පුළුවන් වෙන්න හැදුවා
+ 
   const isDateAllowed = (date) => {
     const dayName = format(date, 'EEEE').toLowerCase();
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const isFutureOrToday = date >= today; // අද හෝ ඊට පස්සේ දවස්
+    const isFutureOrToday = date >= today; 
 
     return availableDays.includes(dayName) && isFutureOrToday;
   };

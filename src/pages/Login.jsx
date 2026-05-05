@@ -5,18 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 function Login() {
   const navigate = useNavigate(); 
 
-  
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
-  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -24,7 +21,6 @@ function Login() {
     });
   };
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -32,7 +28,6 @@ function Login() {
     setSuccess(null);
 
     try {
-      
       const response = await fetch('http://localhost:8080/api/patients/login', {
         method: 'POST',
         headers: {
@@ -49,12 +44,10 @@ function Login() {
         
         setSuccess("Login successful! Redirecting...");
         
-       
         setTimeout(() => {
           navigate('/dashboard'); 
         }, 1500);
       } else {
-        
         setError(data.message || "Invalid email or password!");
       }
     } catch (err) {
@@ -88,7 +81,6 @@ function Login() {
         </div>
       )}
 
-     
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-slate-700 text-sm font-semibold mb-2 ml-1">Email Address</label>
@@ -132,7 +124,7 @@ function Login() {
         </button>
 
         <p className="text-center text-slate-500 text-sm mt-8">
-          Don't have an account? <Link to="/signup" className="text-blue-600 font-bold hover:underline">Create Account</Link>
+          Don't have an account? <Link to="/signUp" className="text-blue-600 font-bold hover:underline">Create Account</Link>
         </p>
       </form>
     </AuthLayout>

@@ -13,7 +13,7 @@ function ServiceCard({ service, baseUrl }) {
              className="w-10 h-10 object-contain group-hover:brightness-0 group-hover:invert transition-all duration-300"
            />
         ) : (
-           <span className="text-4xl group-hover:text-white">🩺</span> // Image නැත්නම් Default Emoji එක
+           <span className="text-4xl group-hover:text-white">🩺</span> 
         )}
       </div>
       

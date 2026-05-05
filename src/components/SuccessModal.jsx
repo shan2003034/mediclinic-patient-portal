@@ -11,7 +11,7 @@ function SuccessModal({ isOpen, onClose, title = "Booking Confirmed!", message }
         </div>
         <h3 className="text-2xl font-extrabold text-slate-800 mb-2">{title}</h3>
         <p className="text-slate-500 mb-8 leading-relaxed font-medium">
-          {/* පිටින් එවන මැසේජ් එක මෙතන පෙන්නනවා */}
+          
           {message || "Your request has been processed successfully."}
         </p>
         <button 

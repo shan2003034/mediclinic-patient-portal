@@ -1,7 +1,7 @@
 import React from 'react';
 
 function AlertBanner({ title, message, buttonText, onButtonClick, type = 'warning' }) {
-  // Alert එකේ වර්ගය අනුව පාට වෙනස් වෙන්න හදලා තියෙන්නේ
+  
   const styles = {
     warning: {
       bg: 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200/60',
@@ -10,7 +10,7 @@ function AlertBanner({ title, message, buttonText, onButtonClick, type = 'warnin
       text: 'text-amber-700/80',
       button: 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/20'
     },
-    // ඉස්සරහට අවශ්‍ය වුණොත් success, error වගේ ඒවත් මෙතනට දාන්න පුළුවන්
+    
   };
 
   const currentStyle = styles[type] || styles.warning;

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import DetailedServiceCard from '../components/DetailedServiceCard'; // ෆයිල් එක තියෙන තැන හරියට දෙන්න
+import DetailedServiceCard from '../components/DetailedServiceCard'; 
 
 function Services() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // පේජ් එක ලෝඩ් වෙද්දී Backend API එකට කතා කරනවා
   useEffect(() => {
     fetch('http://localhost:8080/api/public/services')
       .then(res => {
@@ -14,7 +13,7 @@ function Services() {
         return res.json();
       })
       .then(data => {
-        setServices(data); // Backend එකෙන් එන දත්ත state එකට දානවා
+        setServices(data); 
         setLoading(false);
       })
       .catch(err => {
@@ -26,7 +25,6 @@ function Services() {
   return (
     <div className="bg-slate-50 min-h-screen font-sans">
       
-      {/* 1. Modern Hero Section (කිසි වෙනසක් නෑ) */}
       <section 
         className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url('https://images.unsplash.com/photo-1538108149393-cebb47acddb2?q=80&w=2069&auto=format&fit=crop')` }}
@@ -48,24 +46,20 @@ function Services() {
         </div>
       </section>
 
-      {/* 2. Detailed Services Grid (API එකෙන් එන දත්ත පෙන්වන තැන) */}
       <section className="py-24">
         <div className="container mx-auto px-6 max-w-7xl">
           
           {loading ? (
-            // දත්ත ලෝඩ් වෙනකම් පෙන්වන එක
             <div className="flex justify-center items-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
             </div>
           ) : services.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {/* ලූපයක් දාලා කාඩ් පෙන්වීම */}
               {services.map((service) => (
                 <DetailedServiceCard key={service.id} service={service} />
               ))}
             </div>
           ) : (
-            // Database එකේ සර්විස් මුකුත් නැත්නම් පෙන්වන එක
             <div className="text-center py-20 text-slate-500 text-lg">
               No active services found at the moment.
             </div>
@@ -74,7 +68,6 @@ function Services() {
         </div>
       </section>
 
-      {/* 3. Emergency & CTA Section (කිසි වෙනසක් නෑ) */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-black opacity-10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
