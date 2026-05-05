@@ -5,6 +5,8 @@ function Contact() {
   const [contactData, setContactData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // අලුතින් දැම්මා: යවන ගමන්ද කියලා බලන්න
+  const [submitError, setSubmitError] = useState(null); // අලුතින් දැම්මා: Error ආවොත් පෙන්නන්න
   
   // ෆෝම් එකේ දත්ත අල්ලගන්න State එක
   const [formData, setFormData] = useState({
@@ -37,18 +39,43 @@ function Contact() {
     }));
   };
 
-  // ෆෝම් එක Submit කරද්දී වෙන දේ (ඊළඟට අපි මෙතනින් තමයි Backend එකට Data යවන්නේ)
+  // --- ෆෝම් එක Submit කරද්දී වෙන දේ (Backend එකට Data යැවීම) ---
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data to send:", formData); // දැනට Console එකේ බලාගන්න
+    setIsSubmitting(true);
+    setSubmitError(null);
     
-    // (මෙතන තමයි API Call එක එන්නේ)
-    
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 4000);
-    
-    // Form එක හිස් කරනවා
-    setFormData({ firstName: '', lastName: '', email: '', message: '' });
+    // Spring Boot API එකට POST Request එක යවනවා
+    fetch('http://localhost:8080/api/public/contact/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData), // State එකේ තියෙන දත්ත JSON කරලා යවනවා
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("Failed to send message");
+      }
+      return res.json();
+    })
+    .then(data => {
+      // සාර්ථකව යැව්වා නම්
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      // තත්පර 4කින් Success මැසේජ් එක අයින් කරනවා
+      setTimeout(() => setIsSubmitted(false), 4000);
+      
+      // Form එක ආයෙත් හිස් කරනවා
+      setFormData({ firstName: '', lastName: '', email: '', message: '' });
+    })
+    .catch(err => {
+      // Error එකක් ආවොත්
+      console.error("Error sending message:", err);
+      setIsSubmitting(false);
+      setSubmitError("Failed to send the message. Please try again later.");
+    });
   };
 
   if (loading) {
@@ -128,10 +155,19 @@ function Contact() {
                 <p className="text-slate-500">Fill out the form below and our medical team will get back to you as soon as possible.</p>
               </div>
               
+              {/* සාර්ථක වූ විට පෙන්වන කොටස */}
               {isSubmitted && (
                 <div className="mb-8 bg-emerald-50 border border-emerald-100 text-emerald-600 px-6 py-4 rounded-2xl flex items-center gap-4 animate-fade-in">
                   <div className="bg-emerald-100 rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg></div>
                   <span className="font-medium">Message sent successfully! We'll contact you soon.</span>
+                </div>
+              )}
+
+              {/* Error ආවොත් පෙන්වන කොටස */}
+              {submitError && (
+                <div className="mb-8 bg-red-50 border border-red-100 text-red-600 px-6 py-4 rounded-2xl flex items-center gap-4 animate-fade-in">
+                  <div className="bg-red-100 rounded-full p-1"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path></svg></div>
+                  <span className="font-medium">{submitError}</span>
                 </div>
               )}
 
@@ -145,7 +181,8 @@ function Contact() {
                       value={formData.firstName}
                       onChange={handleChange}
                       required 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400" 
+                      disabled={isSubmitting}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400 disabled:opacity-50" 
                       placeholder="John" 
                     />
                   </div>
@@ -157,7 +194,8 @@ function Contact() {
                       value={formData.lastName}
                       onChange={handleChange}
                       required 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400" 
+                      disabled={isSubmitting}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400 disabled:opacity-50" 
                       placeholder="Doe" 
                     />
                   </div>
@@ -171,7 +209,8 @@ function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400" 
+                    disabled={isSubmitting}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400 disabled:opacity-50" 
                     placeholder="john@example.com" 
                   />
                 </div>
@@ -183,14 +222,20 @@ function Contact() {
                     value={formData.message}
                     onChange={handleChange}
                     required 
+                    disabled={isSubmitting}
                     rows="4" 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400 resize-none" 
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400 resize-none disabled:opacity-50" 
                     placeholder="How can we help you today?"
                   ></textarea>
                 </div>
 
-                <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-2xl hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transition-all duration-300 mt-4">
-                  Send Message
+                {/* යවන ගමන් නම් "Sending..." කියලා වැටෙනවා */}
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className={`w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-2xl hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transition-all duration-300 mt-4 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>
