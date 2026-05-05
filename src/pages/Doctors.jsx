@@ -1,28 +1,61 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import DoctorCard from '../components/DoctorCard'; // කලින් හදපු Component එක Import කරගන්නවා
 
 function Doctors() {
-  
-  const doctorsList = [
-    { id: 1, name: "Dr. Sarah Johnson", specialty: "Cardiology", experience: "15 Years", image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop" },
-    { id: 2, name: "Dr. Michael Lee", specialty: "Neurology", experience: "12 Years", image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop" },
-    { id: 3, name: "Dr. Emily Chen", specialty: "Pediatrics", experience: "8 Years", image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=1974&auto=format&fit=crop" },
-    { id: 4, name: "Dr. James Wilson", specialty: "Surgery", experience: "20 Years", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=1964&auto=format&fit=crop" },
-    { id: 5, name: "Dr. Kamal Perera", specialty: "Cardiology", experience: "10 Years", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=2070&auto=format&fit=crop" },
-    { id: 6, name: "Dr. Nimali Silva", specialty: "Pediatrics", experience: "5 Years", image: "https://images.unsplash.com/photo-1614608682850-e0d6ed316d47?q=80&w=1976&auto=format&fit=crop" }
-  ];
-
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const categories = ['All', 'Cardiology', 'Neurology', 'Pediatrics', 'Surgery'];
+  
+  // එකපාරකට පෙන්වන ඩොක්ටර්ස්ලා ගාන (Load More වෙනුවෙන්)
+  const [visibleCount, setVisibleCount] = useState(6); 
+  
+  const BASE_URL = 'http://localhost:8080/';
 
+  // 1. Backend එකෙන් Doctors දත්ත ගන්නවා
+  useEffect(() => {
+    // (මේ API එක ඔයා Backend එකේ හදන්න ඕනේ අර Home Page එකේ Top Doctors යැව්වා වගේමයි)
+    fetch('http://localhost:8080/api/public/doctors')
+      .then(res => res.json())
+      .then(data => {
+        setDoctors(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching doctors:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  // 2. ඩොක්ටර්ස්ලාගේ දත්ත වලින්ම Specializations ටික හොයාගෙන Filter බොත්තම් ටික හදනවා
+  // Set එකක් පාවිච්චි කරන්නේ එකම නම දෙපාරක් එන එක නවත්තන්න
+  const categories = ['All', ...new Set(doctors.map(doc => doc.specialization))];
+
+  // 3. තෝරපු Category එකට අදාළව ඩොක්ටර්ස්ලාව ෆිල්ටර් කරනවා
   const filteredDoctors = selectedCategory === 'All' 
-    ? doctorsList 
-    : doctorsList.filter(doctor => doctor.specialty === selectedCategory);
+    ? doctors 
+    : doctors.filter(doctor => doctor.specialization === selectedCategory);
+
+  // 4. Load More එකට අදාළව පෙන්වන්න ඕන ඩොක්ටර්ස්ලා ටික වෙන් කරගන්නවා
+  const displayedDoctors = filteredDoctors.slice(0, visibleCount);
+
+  // Category එක මාරු කරද්දී ආයෙත් මුල ඉඳන් (6ක්) පෙන්වන්න State එක රීසෙට් කරනවා
+  useEffect(() => {
+    setVisibleCount(6);
+  }, [selectedCategory]);
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-b-4"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-slate-50 min-h-screen pb-20">
       
-      {/* 1. Modern Hero Section (Matched with Contact Design) */}
+      {/* 1. Modern Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
             <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-blue-400 blur-3xl"></div>
@@ -40,7 +73,7 @@ function Doctors() {
         </div>
       </section>
 
-      {/* 2. Filter Bar - Modern Sticky UI */}
+      {/* 2. Filter Bar - Dynamic UI */}
       <section className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200 py-6">
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap justify-center gap-3">
@@ -61,59 +94,35 @@ function Doctors() {
         </div>
       </section>
 
-      {/* 3. Doctors Grid - Modern Cards */}
-      <section className="py-20">
+      {/* 3. Doctors Grid - Reusing DoctorCard */}
+      <section className="pt-20">
         <div className="container mx-auto px-6">
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            
-            {filteredDoctors.map((doctor) => (
-              <div key={doctor.id} className="group bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-slate-200/60 border border-white hover:-translate-y-2 transition-all duration-500">
-                
-                {/* Image Container with Specialty Badge */}
-                <div className="h-72 overflow-hidden relative">
-                  <img 
-                    src={doctor.image} 
-                    alt={doctor.name} 
-                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute top-4 right-4">
-                     <span className="bg-white/90 backdrop-blur-md text-blue-600 text-xs font-bold px-4 py-2 rounded-2xl shadow-sm uppercase tracking-widest">
-                       {doctor.specialty}
-                     </span>
-                  </div>
-                </div>
-
-                {/* Doctor Details */}
-                <div className="p-8 text-center">
-                  <h3 className="text-2xl font-extrabold text-slate-800 mb-2 tracking-tight group-hover:text-blue-600 transition-colors">
-                    {doctor.name}
-                  </h3>
-                  
-                  <div className="flex items-center justify-center gap-2 mb-6">
-                    <div className="bg-slate-100 p-1.5 rounded-lg">
-                      <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <span className="text-slate-500 font-medium text-sm">{doctor.experience} of Expertise</span>
-                  </div>
-                  
-                  <Link to="/appointments">
-                    <button className="w-full bg-slate-50 text-blue-600 font-bold py-4 rounded-2xl hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300">
-                      Book Appointment
-                    </button>
-                  </Link>
-                </div>
-
-              </div>
+            {displayedDoctors.map((doctor) => (
+              // අපි කලින් හදපු DoctorCard එක මෙතන පාවිච්චි කරනවා
+              <DoctorCard key={doctor.id} doctor={doctor} baseUrl={BASE_URL} />
             ))}
-
           </div>
 
-          {/* Empty State */}
+          {/* Load More Button Section */}
+          {visibleCount < filteredDoctors.length && (
+            <div className="text-center mt-16">
+              <button 
+                onClick={() => setVisibleCount(prev => prev + 6)}
+                className="bg-white text-blue-600 border-2 border-blue-600 px-10 py-3 rounded-full font-bold hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300"
+              >
+                Load More Doctors
+              </button>
+            </div>
+          )}
+
+          {/* Empty State (අදාළ category එකේ කවුරුත් නැත්නම්) */}
           {filteredDoctors.length === 0 && (
-            <div className="text-center py-32 bg-white rounded-[3rem] shadow-inner border border-slate-100 max-w-4xl mx-auto">
+            <div className="text-center py-32 bg-white rounded-[3rem] shadow-inner border border-slate-100 max-w-4xl mx-auto mt-10">
               <div className="text-6xl mb-6 opacity-30">🔍</div>
-              <h3 className="text-2xl text-slate-400 font-semibold">No specialists found in this category.</h3>
-              <p className="text-slate-400 mt-2">Try selecting a different medical department.</p>
+              <h3 className="text-2xl text-slate-400 font-semibold">No specialists found.</h3>
+              <p className="text-slate-400 mt-2">Currently, there are no doctors available in this category.</p>
               <button 
                 onClick={() => setSelectedCategory('All')}
                 className="mt-6 text-blue-600 font-bold hover:underline"
